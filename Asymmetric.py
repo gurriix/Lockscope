@@ -1,18 +1,17 @@
 
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
-from os import chmod
 
 
 class RSAcipher:
     
     # Initialization of variables
     def __init__(self):
-        self.private_key_path = r"C:\Users\User\Desktop\Lockscope V2\Keys\private_key.pem"
-        self.public_key_path = r"C:\Users\User\Desktop\Lockscope V2\Keys\public_key.pem"
+        self.private_key_path = r"C:\Users\User\Desktop\Lockscope V2\RSAKeys\private_key.pem"
+        self.public_key_path = r"C:\Users\User\Desktop\Lockscope V2\RSAKeys\public_key.pem"
         self.size_bytes_path = r"C:\Users\User\Desktop\Lockscope V2\size_bytes.txt"
         self.bit_len = 2048
-        self.file_path = r"C:\Users\User\Desktop\Test Files\calendario_ETSISI.pdf"
+        self.file_path = r"C:\Users\User\Desktop\Test Files\Forest.jpg"
         
     # Generation of private and public RSA keys
     def generate_rsa_keys(self):
@@ -48,6 +47,7 @@ class RSAcipher:
 
     # Method to open the file to cipher
     def open_file(self):
+
         with open(self.file_path, "rb") as file:
             file.seek(100)
             rest_content = file.read()
@@ -129,8 +129,15 @@ class RSAcipher:
         return concat_content
 
 
-    
-    
+if __name__ == '__main__':
+    try:
+        rsa_cipher_process = RSAcipher()
+
+        rsa_cipher_process.decryption()
+        
+
+    except KeyboardInterrupt:
+        exit(1)
     
     
     
