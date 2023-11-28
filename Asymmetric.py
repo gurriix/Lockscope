@@ -7,9 +7,9 @@ class RSAcipher:
     
     # Initialization of variables
     def __init__(self):
-        self.private_key_path = r"C:\Users\User\Desktop\Lockscope V2\RSAKeys\private_key.pem"
-        self.public_key_path = r"C:\Users\User\Desktop\Lockscope V2\RSAKeys\public_key.pem"
-        self.size_bytes_path = r"C:\Users\User\Desktop\Lockscope V2\size_bytes.txt"
+        self.private_key_path = r"C:\Users\User\Desktop\Lockscope\RSAKeys\private_key.pem"
+        self.public_key_path = r"C:\Users\User\Desktop\Lockscope\RSAKeys\public_key.pem"
+        self.size_bytes_path = r"C:\Users\User\Desktop\Lockscope\size_bytes.txt"
         self.bit_len = 2048
         self.file_path = r"C:\Users\User\Desktop\Test Files\Forest.jpg"
         
