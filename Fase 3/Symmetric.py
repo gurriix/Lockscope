@@ -14,22 +14,17 @@ class AEScipher:
     # Initialization of variables
     def __init__(self): 
         self.block_size = 32
-        self.key_path = r"C:\Users\User\Desktop\Lockscope\AESKey\key.pkl"
+        self.key_path = r"C:\Users\User\Desktop\Lockscope\Fase 3\AESKey\key.pkl"
         self.files_path = pathlib.Path(r"C:\Users\User\Desktop\Test Files")
-        self.size_bytes_path = r"C:\Users\User\Desktop\Lockscope\size_bytes.txt"
-        self.iv_path = r"C:\Users\User\Desktop\Lockscope\iv.txt"
+        self.size_bytes_path = r"C:\Users\User\Desktop\Lockscope\Fase 3\size_bytes.txt"
+        self.iv_path = r"C:\Users\User\Desktop\Lockscope\Fase 3\iv.txt"
 
     # Generate the AES key
     def generate_aes_key(self):
         aes_key = Random.new().read(self.block_size)
-        
-        b64key = base64.b64encode(aes_key)
-
-        with open(self.key_path, "rb") as f:
-            empty = f.read()
-            if not empty:
-                with open(self.key_path, "wb") as key_file:
-                    pickle.dump(b64key, key_file)
+    
+        with open(self.key_path, "wb") as key_file:
+            pickle.dump(aes_key, key_file)
 
     # Open the plain file and read data
     def open_file(self, path):
@@ -57,10 +52,8 @@ class AEScipher:
 
         with open(self.key_path, "rb") as key_file:
             aes_key = pickle.load(key_file)
-        
-        b64key = base64.b64decode(aes_key)
 
-        cipher = AES.new(b64key, AES.MODE_CBC, iv)
+        cipher = AES.new(aes_key, AES.MODE_CBC, iv)
         
         for files in self.files_path.iterdir():
 
@@ -125,12 +118,10 @@ class AEScipher:
         with open(self.key_path, "rb") as key_file:
             aes_key = pickle.load(key_file)
         
-        b64key = base64.b64decode(aes_key)
-
         with open(self.iv_path, "rb") as iv_file:
             iv = iv_file.read()
 
-        cipher = AES.new(b64key, AES.MODE_CBC, iv)
+        cipher = AES.new(aes_key, AES.MODE_CBC, iv)
 
         for files in self.files_path.iterdir():
 
