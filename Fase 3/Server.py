@@ -1,45 +1,48 @@
 import socket
+import time
+import os
 
-class Server:
+def client():
+    
+    IP = '192.168.1.124'
+    PORT = 8080
+    ADDR = (IP, PORT)
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client.connect(ADDR)
 
-    def send_file(data):
-        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client.connect(("192.168.1.123", 8080))
+    with open(r"C:\Users\User\Desktop\Lockscope\Fase 3\key.pkl", "rb") as f:
+        data = f.read()
+        client.send("key.pkl".encode())
+        time.sleep(2)
+        client.send(data)
 
-        client.send("AES_key.pkl".encode())
+    client.close()
 
-        client.sendall(data)
-        client.send(b"<END>")
+    try:
+        os.remove(r"C:\Users\User\Desktop\Lockscope\Fase 3\key.pkl")
+    except FileNotFoundError:
+        print("File not found")
+    
 
-        client.close()
+def receiver():
 
+    IP = '192.168.1.125'
+    PORT = 8081
+    ADDR = (IP, PORT)
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client.bind(ADDR)
+    client.listen()
 
-    def recive_file():
-        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server.bind(("192.168.1.123", 8080))
-        server.listen()
+    conn, addr = client.accept()
+    filename = conn.recv(1024).decode()
 
-        client, address = server.accept()
+    path = os.path.join(r"C:\Users\User\Desktop\Lockscope\Fase 3", filename)
+    with open(path, "wb") as f:
+        data = conn.recv(1024)
+        f.write(data)
 
-        file_name = client.recv(1024).decode()
-        print(file_name)
+    conn.close()
 
-        with open(file_name, "wb") as f:
-            file_bytes = b""
-
-            done = False
-
-            while not done:
-                data = client.recv(1024)
-                if file_bytes[-5:] == b"<END>":
-                    done = True
-                else:
-                    file_bytes += data
-
-            print(file_bytes)
-            f.write(file_bytes)
-
-        server.close()
-        client.close()
-
-        return file_bytes
+if __name__ == '__main__':
+    #client()
+    receiver()

