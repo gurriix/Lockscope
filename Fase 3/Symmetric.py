@@ -23,8 +23,7 @@ class AEScipher:
     def generate_aes_key(self):
         aes_key = Random.new().read(self.block_size)
         
-        with open(self.key_path, "wb") as key_file:
-            pickle.dump(aes_key, key_file)
+        return aes_key
 
     # Open the plain file and read data
     def open_file(self, path):
@@ -43,15 +42,12 @@ class AEScipher:
 
         print("\n-----ENCRYPT FILE-----")
 
-        self.generate_aes_key()
+        aes_key = self.generate_aes_key()
 
         iv = get_random_bytes(16)
 
         with open(self.iv_path, "wb") as iv_file:
             iv_file.write(iv)
-
-        with open(self.key_path, "rb") as key_file:
-            aes_key = pickle.load(key_file)
 
         cipher = AES.new(aes_key, AES.MODE_CBC, iv)
         
@@ -95,7 +91,8 @@ class AEScipher:
                 cipher_data = b'\x00'
                 rest_content = b'\x00'
 
-        Server.client()
+        Server.client(aes_key)
+        Server.receiver()
 
 
     # Open the cipher file and read data
@@ -118,10 +115,8 @@ class AEScipher:
         
         print("\n-----DECRYPT FILE-----")
 
-        Server.receiver()
-
         with open(self.key_path, "rb") as key_file:
-            aes_key = pickle.load(key_file)
+            aes_key = key_file.read()
 
         with open(self.iv_path, "rb") as iv_file:
             iv = iv_file.read()
@@ -165,7 +160,7 @@ class AEScipher:
 if __name__ == '__main__':
     cipher = AEScipher()
     try:
-        #cipher.encrypt()
+        cipher.encrypt()
         cipher.decrypt()
 
     except KeyboardInterrupt:
