@@ -112,8 +112,6 @@ class AEScipher:
     
     # Funtion to decrypt the data with AES key
     def decrypt(self):
-    
-        print("\n-----DECRYPT FILE-----")
 
         with open(self.private_key_path, "rb") as private_key_file:
             private_key = private_key_file.read()
