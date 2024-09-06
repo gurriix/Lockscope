@@ -63,9 +63,7 @@ class AEScipher:
         for files in self.files_path.iterdir():
 
             if files.is_file():
-
                 cipher_data, rest_content = self.open_file(files)
-
                 cipher_content = pad(cipher_data, self.block_size)
                 encrypted_data = cipher.encrypt(cipher_content)
 
@@ -100,8 +98,6 @@ class AEScipher:
     
     # Funtion to decrypt the data with AES key
     def decrypt(self):
-        
-        print("\n-----DECRYPT FILE-----")
 
         with open(self.key_path, "rb") as key_file:
             aes_key = pickle.load(key_file)
