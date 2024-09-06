@@ -59,27 +59,16 @@ class RSAcipher:
     
     #Method to do the encryption of the file opened with open_file()
     def encryption(self):
-        
-        print("\n-----ENCRYPT-----")
 
         self.generate_rsa_keys()
 
         cipher_data, rest_content = self.open_file()
-
-        print("\nContenido del archivo a cifrar:\n", cipher_data)
-        print("Resto del contenido del archivo:\n",rest_content)
-
         encrypted_data = self.encrypt(cipher_data)
-        
-        print("\nTamaño del contenido encriptado:\n", len(encrypted_data))
 
         with open(self.size_bytes_path, "w") as content_size:
             content_size.write(str(len(encrypted_data)))
 
         concat_bytes = encrypted_data + rest_content
-
-        print("\nContenido del archivo cifrado:\n", encrypted_data)
-        print("Resto del contenido del archivo:\n", rest_content)
 
         with open(self.file_path, "wb") as encrypted_file:
             encrypted_file.write(concat_bytes)
@@ -103,20 +92,9 @@ class RSAcipher:
     # Method which takes the encrypted file using the method open_file_encryted() and decrypt the content
     def decryption(self):
 
-        print("\n-----DECRYPT-----")
-
         encrypted_data, rest_content = self.open_file_encrypted()
-
-        print("\nContenido del archivo cifrado:\n", encrypted_data)
-        print("Resto del contenido del archivo:\n", rest_content)
-
         decrypted_data = self.decrypt(encrypted_data)
-
-        print("\nContenido del archivo descifrado:\n", decrypted_data)
-
         concat_content = decrypted_data + rest_content
-
-        print("\nContenido total del archivo:\n", concat_content)
      
         with open(self.file_path, "wb") as decrypted_file:
             decrypted_file.write(concat_content)
@@ -129,7 +107,7 @@ if __name__ == '__main__':
         rsa_cipher_process = RSAcipher()
 
         rsa_cipher_process.encryption()
-        #rsa_cipher_process.decryption()
+        rsa_cipher_process.decryption()
         
     except KeyboardInterrupt:
         exit(1)
