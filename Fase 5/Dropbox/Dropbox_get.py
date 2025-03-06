@@ -41,7 +41,7 @@ def download_files():
             
             aes_key = res1.content
             private_key = res2.content
-	          public_key = res3.content
+	    public_key = res3.content
 
             with open(local_aes_key_path, "wb") as f:
                 f.write(aes_key)
@@ -65,4 +65,4 @@ def download_files():
        
        
 if __name__ == '__main__':
-		download_files()
+       download_files()
