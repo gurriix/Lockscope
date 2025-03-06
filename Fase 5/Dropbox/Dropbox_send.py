@@ -1,7 +1,7 @@
 import dropbox
 import time
 
-api_key = 'sl.B6BvZhHkQt0LnAW2uZYmnPpuk4uqRf5c3tXvwaOby_3cH3nsL7fL4Mo476WJ05-OUud6JH_RYH77yLtrugr-bAAFqHDFEPEg37KQqQeI-gJI26aApkLwkZGidmLa4i74NpmS4DFwKqV2oZCbpq9Fa6I'
+api_key = 'sl.token'
 
 dbx = dropbox.Dropbox(api_key)
 
@@ -22,8 +22,8 @@ def upload_files(key,public_key,private_key):
     dropbox_aes_key_path, dropbox_private_key_path = dropbox_paths()
     local_aes_key_path, local_private_key_path = local_paths()
 		
-		with open(local_aes_key_path, "rb") as f:
-		    aes_key = f.read()
+    with open(local_aes_key_path, "rb") as f:
+	aes_key = f.read()
             
     with open(local_private_key_path, "rb") as f:
         private_key = f.read()
@@ -35,4 +35,4 @@ def upload_files(key,public_key,private_key):
         print("API error")
 
 if __name__ == '__main__':
-		send_files()
+	send_files()
