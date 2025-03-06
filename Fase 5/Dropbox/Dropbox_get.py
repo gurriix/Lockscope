@@ -2,7 +2,7 @@ import dropbox
 from dropbox.exceptions import ApiError
 import time
 
-api_key = 'sl.B6BvZhHkQt0LnAW2uZYmnPpuk4uqRf5c3tXvwaOby_3cH3nsL7fL4Mo476WJ05-OUud6JH_RYH77yLtrugr-bAAFqHDFEPEg37KQqQeI-gJI26aApkLwkZGidmLa4i74NpmS4DFwKqV2oZCbpq9Fa6I'
+api_key = 'sl.token'
 
 dbx = dropbox.Dropbox(api_key)
 
