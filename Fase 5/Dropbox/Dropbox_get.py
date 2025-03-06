@@ -9,7 +9,7 @@ dbx = dropbox.Dropbox(api_key)
 def local_paths():
     local_aes_key_path = "/home/tfg/server/Fase5/keys/key.pkl"
     local_private_key_path = "/home/tfg/server/Fase5/keys/private_key.pem"
-	  local_public_key_path = "/home/tfg/server/Fase5/keys/public_key.pem"
+    local_public_key_path = "/home/tfg/server/Fase5/keys/public_key.pem"
 
     return local_aes_key_path, local_private_key_path, local_public_key_path
 
